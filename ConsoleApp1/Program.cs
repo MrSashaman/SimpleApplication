@@ -1,87 +1,141 @@
-﻿
+﻿using System;
 using System.IO;
 
 namespace ConsoleApp1
 {
     class Program
     {
+        const string KEY = "Z";
+
         static void Main()
         {
-
-            string name = "";
-            string key = "Z";
-            string userinput = "";
-            Console.WriteLine("****PROGRAM****");
-            Console.WriteLine("");
+            Console.Title = "ConsoleApp1";
+            Console.WriteLine("**** PROGRAM ****\n");
 
             Console.Write("Name: ");
-            name = Convert.ToString(Console.ReadLine());
-            
-            Console.WriteLine("Welcome! " + name);
-            
-            Console.Write("Key: ");
-            userinput = Convert.ToString(Console.ReadLine());
-            
-            if (userinput == key) 
-            {
-                System.Console.WriteLine("Ключ верный!");
-                KeyCorrect();
-            }
+            string name = Console.ReadLine();
 
+            Console.WriteLine($"Welcome, {name}!");
+
+            Console.Write("Key: ");
+            string userInput = Console.ReadLine();
+
+            if (userInput == KEY)
+            {
+                Console.WriteLine("Ключ верный!\n");
+                MainMenu();
+            }
             else
             {
-                System.Console.WriteLine("Неверный ключ!");
-                Console.ReadLine();
-                Console.Clear();
-                
+                Console.WriteLine("Неверный ключ!");
             }
+
+            Console.WriteLine("\nНажмите любую клавишу для выхода...");
             Console.ReadKey();
-
         }
-        
-        static void GoldBuy()
-        {
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string fileName = "hacked.txt";
-            string filePath = Path.Combine(desktopPath, fileName);
-            File.WriteAllText(filePath, "BUY GOLDBUY GOLDBUY GOLDBUY GOLDBUY GOLDBUY GOLDBUY GOLDBUY GOLD");
 
-            Console.Write("ERROR");
-        }
-        
-        static void KeyCorrect()
+        static void MainMenu()
         {
             while (true)
             {
-                Console.WriteLine("-----MainMenu-----");
+                Console.WriteLine("\n----- Main Menu -----");
                 Console.WriteLine("1 - Калькулятор");
                 Console.WriteLine("2 - Информация");
+                Console.WriteLine("3 - Выход");
+                Console.Write("Выбор: ");
 
-                if (!int.TryParse(Console.ReadLine(), out int userinput))
+                if (!int.TryParse(Console.ReadLine(), out int choice))
                 {
                     Console.WriteLine("Введите число!");
                     continue;
                 }
 
-                if (userinput == 1)
+                Console.Clear();
+
+                switch (choice)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Калькулятор");
-                    break;
-                }
-                else if (userinput == 2)
-                {
-                    Console.WriteLine("Информация");
-                    Console.WriteLine("©SteelFoxGames - 2026");
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Ввод неверный! Используйте: 1 или 2");
+                    case 1:
+                        Calculator();
+                        break;
+
+                    case 2:
+                        ShowInfo();
+                        break;
+
+                    case 3:
+                        return;
+
+                    default:
+                        Console.WriteLine("Неверный пункт меню!");
+                        break;
                 }
             }
         }
 
+        static void Calculator()
+        {
+            Console.WriteLine("=== Калькулятор ===");
 
+            Console.Write("Введите первое число: ");
+            if (!double.TryParse(Console.ReadLine(), out double a))
+            {
+                Console.WriteLine("Ошибка ввода!");
+                return;
+            }
+
+            Console.Write("Оператор (+ - * /): ");
+            char op = Console.ReadKey().KeyChar;
+            Console.WriteLine();
+
+            Console.Write("Введите второе число: ");
+            if (!double.TryParse(Console.ReadLine(), out double b))
+            {
+                Console.WriteLine("Ошибка ввода!");
+                return;
+            }
+
+            double result;
+
+            switch (op)
+            {
+                case '+':
+                    result = a + b;
+                    break;
+                case '-':
+                    result = a - b;
+                    break;
+                case '*':
+                    result = a * b;
+                    break;
+                case '/':
+                    if (b == 0)
+                    {
+                        Console.WriteLine("Деление на ноль!");
+                        return;
+                    }
+                    result = a / b;
+                    break;
+                default:
+                    Console.WriteLine("Неизвестный оператор!");
+                    return;
+            }
+
+            Console.WriteLine($"Результат: {result}");
+        }
+
+        static void ShowInfo()
+        {
+            Console.WriteLine("=== Информация ===");
+            Console.WriteLine("© SteelFoxGames");
+            Console.WriteLine("Версия: 1.0");
+            Console.WriteLine("Год: 2026");
+        }
+
+        static void GoldBuy()
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string filePath = Path.Combine(desktopPath, "hacked.txt");
+            File.WriteAllText(filePath, "BUY GOLD BUY GOLD BUY GOLD");
+        }
     }
 }
